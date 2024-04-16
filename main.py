@@ -1,6 +1,12 @@
 from fpdf import FPDF
 import pandas as pd
 
+# page_height = 297
+# av_height = page_height - 20
+# line_space = 10
+# num_lines = int(page_height / line_space)
+
+
 df = pd.read_csv('topics.csv')
 print(df)
 
@@ -21,26 +27,34 @@ for index, row in df.iterrows():
     pdf.set_font(family='Times', size=12, style='B')
     pdf.set_text_color(100, 100, 100)
     pdf.cell(w=0, h=12, txt=row['Topic'], align="L", ln=1)
-    pdf.line(10,20, 200, 20)
+    # for line in range(num_lines):
+    #     y = 20 + line * line_space
+    #     pdf.line(10, y, 200, y)
+    # adding multiple lines with a distance of 10mm
+    for y in range(20, 298, 10):
+        pdf.line(10, y, 200, y)
 
-# Set the footer
+    # Set the footer
     pdf.ln(260)
     pdf.set_font(family='Times', size=8, style='B')
-    pdf.set_text_color(100,100,100)
+    pdf.set_text_color(100, 100, 100)
     pdf.cell(w=0, h=8, txt=row['Topic'], align='R', ln=1)
 
-# adding more pages
+    # adding more pages
     for i in range(row['Pages'] - 1):
         pdf.add_page()
 
-        pdf.ln(272)
+        pdf.ln(272)  # Here we increase the nunber of break lines because our footer was displaying a little higher.
+        # We added the original number of
+        # breaklines and the height of the cell component 260 + 12
         pdf.set_font(family='Times', size=8, style='B')
         pdf.set_text_color(100, 100, 100)
         pdf.cell(w=0, h=8, txt=row['Topic'], align='R', ln=1)
+        # for line in range(num_lines):
+        #     y = 20 + line * line_space
+        #     pdf.line(10, y, 200, y)
+        for y in range(20, 298, 10):
+            pdf.line(10, y, 200, y)
+
 
 pdf.output("output")
-
-
-
-
-
